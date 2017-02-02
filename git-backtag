@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#
+# A custom git command that implements backdating tags as described in
+# https://git-scm.com/docs/git-tag#_on_backdating_tags .
+#
+# Author: Lucas Magasweran <lucas.magasweran@ieee.org>
+#
+set -o errexit
+
+usage() {
+	echo "usage: git tag [-h|-a|-s|-u <key-id>] [-f] [-m <msg>|-F <file>] <tagname> <commit>"
+	echo -e "    commit    date of commit will be used to backdate tag"
+}
+
+opts=`getopt --options hasfu:m:F: --long annotate,sign,force,local-user:,message:,file: -- "$@"`
+if [ $? != 0 ] ; then echo "Failed parsing options." >&2 ; exit 1 ; fi
+eval set -- "$opts"
+
+while [[ $# != 0 ]]; do
+	case "$1" in
+	-h)
+		usage
+		exit
+		;;
+	-a|--annotate) ;&
+	-s|--sign) ;&
+	-f|--force)
+		shift
+		;;
+	-u|--local-user) ;&
+	-m|--message) ;&
+	-F|--file)
+		shift 2
+		;;
+	--)
+		shift
+		break
+		;;
+	esac
+done
+
+if [[ -z ${1} ]] || [[ -z ${2} ]]; then
+	usage
+	exit 1
+fi
+
+tagname=$1
+commit=$2
+branch=$(git symbolic-ref --short -q HEAD)
+
+remove_commit() {
+   echo "${@:1:$#-1}"
+}
+
+opts2=`remove_commit ${opts}`
+
+git checkout --quiet $commit
+
+GIT_COMMITTER_DATE="$(git show --format=%aD | head -1)" eval git tag ${opts2}
+
+git checkout --quiet $branch
+
