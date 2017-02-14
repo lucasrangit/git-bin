@@ -8,7 +8,7 @@
 set -o errexit
 
 usage() {
-	echo "usage: git tag [-h|-a|-s|-u <key-id>] [-f] [-m <msg>|-F <file>] <tagname> <commit>"
+	echo "usage: git backtag [-h|-a|-s|-u <key-id>] [-f] [-m <msg>|-F <file>] <tagname> <commit>"
 	echo -e "    commit    date of commit will be used to backdate tag"
 }
 
