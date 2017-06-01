@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Copyright (C) 2016 Konsulko Group
+# Author: Pantelis Antoniou
+#
+# https://www.konsulko.com/git-workflow-for-upstreaming-patches-from-a-vendor-kernel-2/
+#
 
 # get top
 top=`git log --oneline HEAD^..HEAD | head -n1`
@@ -14,7 +20,7 @@ fi
 
 # get list of commits and descriptions
 old_IFS=${IFS}
-IFS=$'n'
+IFS=$'\n'
 
 j=0
 for i in `grep -v '^#' $1`; do
