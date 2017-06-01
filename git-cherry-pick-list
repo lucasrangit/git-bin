@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# get top
+top=`git log --oneline HEAD^..HEAD | head -n1`
+ctop=`echo ${top} | cut -d' ' -f1`
+dtop=`echo ${top} | cut -d' ' -f2-`
+l="$ctop $dtop"
+if [ "$l" != "$top" ] ; then
+        echo "Reconstructed top failure"
+        echo $top
+        echo $l
+        exit 5
+fi
+
+# get list of commits and descriptions
+old_IFS=${IFS}
+IFS=$'n'
+
+j=0
+for i in `grep -v '^#' $1`; do
+        c[${j}]=`echo ${i} | cut -d' ' -f1`
+        d[${j}]=`echo ${i} | cut -d' ' -f2-`
+        l="${c[${j}]} ${d[${j}]}"
+        if [ $l != $i ] ; then
+                echo "Reconstructed changeset failure $i"
+                exit 5
+        fi
+        ((j++))
+done
+last=$((j - 1))
+IFS=${old_IFS}
+
+# skip over patches that are applied (checking description only)
+match=0
+for i in `seq 0 $last`; do
+        ct=${c[${i}]}
+        dt=${d[${i}]}
+        if [ "${dt}" == "${dtop}" ]; then
+                echo "Match found at $i: $dt"
+                match=$(($i + 1))
+                break;
+        fi
+        # echo "$i: $ct $dt"
+done
+
+for i in `seq $match $last`; do
+        ct=${c[${i}]}
+        dt=${d[${i}]}
+        echo "cherry-picking: $i: $ct $dt"
+        git cherry-pick $ct
+        if [ $? -ne 0 ] ; then
+                exit 5;
+        fi
+done
+
