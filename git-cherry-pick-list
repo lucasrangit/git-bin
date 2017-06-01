@@ -5,6 +5,17 @@
 #
 # https://www.konsulko.com/git-workflow-for-upstreaming-patches-from-a-vendor-kernel-2/
 #
+set -o errexit
+
+usage() {
+	echo "usage: git cherry-pick-list patchlist.txt"
+	echo "    generate patchlist: git log --oneline --reverse master..bar | tee patchlist.txt"
+}
+
+if [[ -z ${1} ]]; then
+	usage
+	exit 1
+fi
 
 # get top
 top=`git log --oneline HEAD^..HEAD | head -n1`

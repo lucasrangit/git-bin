@@ -16,3 +16,14 @@ Tip: List tags by date:
 git log --tags --simplify-by-decoration --pretty="format:%ci %d"
 ```
 
+## git-cherry-pick-list
+
+A custom git command that iteratively applies a list of patches allowing any merge issues to be fixed. It effectively makes `git cherry-pick` resumable.
+
+```
+git log --oneline --reverse master..bar | tee patchlist.txt
+git cherry-pick-list patchlist.txt
+```
+
+See https://www.konsulko.com/git-workflow-for-upstreaming-patches-from-a-vendor-kernel-2/ for more details.
+
