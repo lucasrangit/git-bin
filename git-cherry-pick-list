@@ -8,9 +8,33 @@
 set -o errexit
 
 usage() {
-	echo "usage: git cherry-pick-list patchlist.txt"
+	echo "usage: git cherry-pick-list [-h|-s] patchlist.txt"
 	echo "    generate patchlist: git log --oneline --reverse master..bar | tee patchlist.txt"
+	echo -e "\t-s, --signoff\t\tadd Signed-off-by:"
+
 }
+
+opts=`getopt --options hs --long help,signoff -- "$@"`
+if [ $? != 0 ] ; then echo "Failed parsing options." >&2 ; exit 1 ; fi
+eval set -- "$opts"
+
+with_signoff=false
+while [[ $# != 0 ]]; do
+	case "$1" in
+	-h|--help)
+		usage
+		exit
+		;;
+	-s|--signoff)
+		with_signoff=true
+		shift
+		;;
+	--)
+		shift
+		break
+		;;
+	esac
+done
 
 if [[ -z ${1} ]]; then
 	usage
@@ -64,7 +88,11 @@ for i in `seq $match $last`; do
         ct=${c[${i}]}
         dt=${d[${i}]}
         echo "cherry-picking: $i: $ct $dt"
-        git cherry-pick $ct
+        if $with_signoff; then
+		git cherry-pick --signoff $ct
+	else
+		git cherry-pick $ct
+	fi
         if [ $? -ne 0 ] ; then
                 exit 5;
         fi
