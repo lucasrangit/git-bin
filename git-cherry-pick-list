@@ -42,7 +42,7 @@ for i in `grep -v '^#' $1`; do
                 echo "Reconstructed changeset failure $i"
                 exit 5
         fi
-        ((j++))
+        ((j+=1))
 done
 last=$((j - 1))
 IFS=${old_IFS}
