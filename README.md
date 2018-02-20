@@ -1,6 +1,12 @@
 # git-custom-commands
 Custom Git Commands
 
+## Installation
+
+Git supports adding new sub commands found in your `$PATH`. Install all with:
+
+# `for f in $(\find * -maxdepth 1 -type f -executable) ; do echo ln -s $f ~/bin/$f ; done`
+
 ## git-backtag
 
 A custom git command that implements backdating tags as described in https://git-scm.com/docs/git-tag#_on_backdating_tags.
