@@ -33,3 +33,9 @@ git cherry-pick-list patchlist.txt
 
 See https://www.konsulko.com/git-workflow-for-upstreaming-patches-from-a-vendor-kernel-2/ for more details.
 
+## git-reset-upstream
+
+A custom git command that resets the local master with the upstream remote master. Useful if you are tracking a canonical master branch.
+
+**Note:** If your local master is non canonical and has changes then you should not use this and instead use `git merge upstream/master`.
+
