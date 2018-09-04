@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# git reset-upstream - update local master with upstream master
+#
+# Based off https://memcpy.io/git-reset-upstream.html by Robert Foss
+
+f() {
+    # default to "origin" if "upstream" does not exist
+    REMOTE="origin"
+    case $(git remote) in
+        *upstream*)
+            REMOTE="upstream"
+            ;;
+    esac;
+    git fetch $REMOTE
+    git update-ref refs/heads/master refs/remotes/$REMOTE/master
+    git checkout master
+    git reset --hard $REMOTE/master
+    # go back to previous branch, assumed to be @{N-1}
+    git checkout -
+}
+
+f >/dev/null 2>&1
+
