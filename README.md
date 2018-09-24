@@ -5,7 +5,7 @@ Custom Git Commands
 
 Git supports adding new sub commands found in your `$PATH`. Install all with:
 
-`for f in $(\find * -maxdepth 1 -type f -executable) ; do echo ln -s $f ~/bin/$f ; done`
+`for f in $(\find * -maxdepth 1 -type f -executable) ; do ln --verbose -s $(pwd)/$f ~/bin/$f ; done`
 
 ## git-backtag
 
