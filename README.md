@@ -39,3 +39,21 @@ A custom git command that resets the local master with the upstream remote maste
 
 **Note:** If your local master is non canonical and has changes then you should not use this and instead use `git merge upstream/master`.
 
+## git-removed-branches
+
+A custom git command to list or remove tracked branches that have been removed by the remote.
+
+```
+usage: git-removed-branches [-h] [--prune] [--force] [--remote REMOTE]
+
+Remove local branches, which are no longer available in the remote
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --prune          Remove branches
+  --force          Force deletion
+  --remote REMOTE  Remote name (default origin)
+```
+
+Copied from @nemisj https://github.com/nemisj/git-removed-branches/blob/master/git-removed-branches.py (MIT License)
+
