@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import subprocess
 import re
@@ -8,6 +8,7 @@ parser = argparse.ArgumentParser(description="Remove local branches, which are n
 parser.add_argument("--prune", action="store_true", help="Remove branches")
 parser.add_argument("--force", action="store_true", help="Force deletion")
 parser.add_argument("--remote", default="origin", help="Remote name")
+parser.add_argument("--verbose", action="store_true", help="Verbose output")
 args = parser.parse_args()
 
 
@@ -77,26 +78,24 @@ def delete_branches(branches):
   if not args.prune:
     print("Found removed branches:")
 
-  print("")
-
   for branch_name in branches:
-    if (args.prune):
-      print("")
-      print("Removing %s" % branch_name)
+    if args.prune:
+      if args.verbose:
+        print("Removing %s" % branch_name)
 
       if args.force:
         deleteFlag = "-D"
       else:
         deleteFlag = "-d"
 
-      return_code = subprocess.call(["git", "branch", deleteFlag, branch_name]);
+      return_code = subprocess.call(["git", "branch", deleteFlag, branch_name], stderr=subprocess.DEVNULL);
       if return_code != 0:
-        print("ERROR: Unable to remove branch")
+        if args.verbose:
+          print("ERROR: Unable to remove branch")
         broken.append(branch_name)
     else:
       print("  - %s" % branch_name)
 
-  print("")
   if broken:
     print("Not all branches are removed:")
 
@@ -127,11 +126,9 @@ def analyze_live_and_remote(live_branches, remote_branches):
   if notFound:
     print("WARNING: Your git repository is outdated, please run \"git fetch -p\"")
     print("         Following branches are not pruned:")
-    print("")
 
     for name in notFound:
       print("  - %s" % name)
-    print("")
 
   return live_branches
 
