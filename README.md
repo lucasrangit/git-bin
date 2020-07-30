@@ -3,7 +3,7 @@ Custom Git Commands
 
 ## Installation
 
-Git supports adding new sub commands found in your `$PATH`. Install all with:
+Git supports adding new sub commands found in your `$PATH`. Either add this directory to your `$PATH` or install symlinks to `~/bin` so you can remove any you don't want.
 
 `for f in $(\find * -maxdepth 1 -type f -executable) ; do ln --verbose -s $(pwd)/$f ~/bin/$f ; done`
 
@@ -39,12 +39,12 @@ A custom git command that resets the local master with the upstream remote maste
 
 **Note:** If your local master is non canonical and has changes then you should not use this and instead use `git merge upstream/master`.
 
-## git-removed-branches
+## git-clean-branches
 
-A custom git command to list or remove tracked branches that have been removed by the remote.
+A custom git command to list or remove locally tracked branches that have been removed on the remote.
 
 ```
-usage: git-removed-branches [-h] [--prune] [--force] [--remote REMOTE]
+usage: git-clean-branches [-h] [--prune] [--force] [--remote REMOTE]
 
 Remove local branches, which are no longer available in the remote
 
@@ -55,5 +55,5 @@ optional arguments:
   --remote REMOTE  Remote name (default origin)
 ```
 
-Copied from @nemisj https://github.com/nemisj/git-removed-branches/blob/master/git-removed-branches.py (MIT License)
+Copied from @nemisj https://github.com/nemisj/git-removed-branches/blob/master/git-removed-branches.py (MIT License) but renamed because it's almost an extension to `git-clean`.
 
