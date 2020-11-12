@@ -76,7 +76,6 @@ def find_live_branches():
 
 
 def delete_branches(branches):
-
     broken = []
 
     if not branches:
