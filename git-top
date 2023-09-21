@@ -1,23 +1,29 @@
 #!/usr/bin/env bash
 #
 # Custom git command that returns the top of the project directory.
-# This handles submodules.
+# This handles submodules stored at any depth.
 #
 # Author: Lucas Magasweran <lrm@linux.com>
 #
+set -o xtrace
 # Start from the current directory
 current_dir=$(pwd)
 
 # Initialize a variable to store the last directory with .git
 last_git_dir=""
 
-# Loop until there's a .git directory or .git file, or we reach the root directory
-while [[ -d "$current_dir/.git" || -f "$current_dir/.git" ]]; do
-    last_git_dir="$current_dir"
-    parent_dir=$(dirname "$current_dir")
+# Loop until we reach the root directory "/"
+while [[ "$current_dir" != "/" ]]; do
+    # Check if the current directory contains a .git directory or file
+    if [[ -d "$current_dir/.git" || -f "$current_dir/.git" ]]; then
+        last_git_dir="$current_dir"
+    fi
 
-    # If we haven't moved up from the current directory, we're at the root
-    if [[ "$parent_dir" == "$current_dir" ]]; then
+    # Use 'git rev-parse' to jump from submodule to parent Git repo
+    parent_dir=$(git -C "$current_dir" rev-parse --show-superproject-working-tree)
+
+    # If 'git rev-parse' fails to return a parent directory, break the loop
+    if [[ -z "$parent_dir" || "$parent_dir" == "$current_dir" ]]; then
         break
     fi
 
