@@ -5,7 +5,6 @@
 #
 # Author: Lucas Magasweran <lrm@linux.com>
 #
-set -o xtrace
 # Start from the current directory
 current_dir=$(pwd)
 
