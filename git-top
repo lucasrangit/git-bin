@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#
+# Custom git command that returns the top of the project directory.
+# This handles submodules.
+#
+# Author: Lucas Magasweran <lrm@linux.com>
+#
+# Start from the current directory
+current_dir=$(pwd)
+
+# Initialize a variable to store the last directory with .git
+last_git_dir=""
+
+# Loop until there's a .git directory or .git file, or we reach the root directory
+while [[ -d "$current_dir/.git" || -f "$current_dir/.git" ]]; do
+    last_git_dir="$current_dir"
+    parent_dir=$(dirname "$current_dir")
+
+    # If we haven't moved up from the current directory, we're at the root
+    if [[ "$parent_dir" == "$current_dir" ]]; then
+        break
+    fi
+
+    current_dir="$parent_dir"
+done
+
+# Check if a .git directory or file was found
+if [[ -n "$last_git_dir" ]]; then
+    echo "$last_git_dir"
+    exit 0
+else
+    exit 1
+fi

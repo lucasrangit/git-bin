@@ -57,3 +57,20 @@ optional arguments:
 
 Copied from @nemisj https://github.com/nemisj/git-removed-branches/blob/master/git-removed-branches.py (MIT License) but renamed because it's almost an extension to `git-clean`.
 
+## git-top
+
+A custom git command to search the parent directories for the topmost git project directory. This handles submodules of any depth whereas `git rev-parse --show-toplevel --show-superproject-working-tree` only works for one level.
+
+```
+$ tree -a
+/home/user/project
+├── external
+│   ├── library
+│   │   ├── .git
+├── .git
+│   ├── branches
+...
+$ cd external/library
+$ git-top
+/home/user/project
+```
