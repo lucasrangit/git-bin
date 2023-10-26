@@ -5,7 +5,7 @@ Custom Git Commands
 
 Git supports adding new sub commands found in your `$PATH`. Either add this directory to your `$PATH` or install symlinks to `~/bin` so you can remove any you don't want.
 
-`for f in $(\find * -maxdepth 1 -type f -executable) ; do ln --force --verbose -s $(pwd)/$f ~/bin/$f ; done`
+`for f in $(\find * -maxdepth 1 -type f -executable -not -path .git) ; do ln --force --verbose -s $(pwd)/$f ~/bin/$f ; done`
 
 ## git-backtag
 
