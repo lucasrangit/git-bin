@@ -74,3 +74,7 @@ $ cd external/library
 $ git-top
 /home/user/project
 ```
+
+## git-sync
+
+A custom git command that synchronizes with a remote that might have many submodule changes that require updating in order to successfully pull the latest changes from the remote. For example, when `git pull --recurse-submodules` fails with `Errors during submodule fetch:`, it may be because a submodule has been updated in such a way that it cannot be updated to the latest without being synchronized as well.
